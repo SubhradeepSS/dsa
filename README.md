@@ -1,1 +1,1 @@
-# LeetCode Submissions
+# Data Structures and Algorithms Practice
