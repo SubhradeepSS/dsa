@@ -1,0 +1,7 @@
+Aptitude
+DBMS
+CO/CA
+OS
+Networks
+// C/C++
+System Design 
