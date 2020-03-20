@@ -18,3 +18,25 @@ int superEggDrop(int k, int n){
         }
         return table[n][k];
     }
+
+//Another solution
+int s(int n,int x){
+        int sum=0,r=1;
+        for(int i=1;i<=n;i++){
+            r*=x-i+1;
+            r/=i;
+            sum+=r;
+        }
+        return sum;
+    }
+    int superEggDrop(int n, int k){
+        int l=1,h=k;
+        while(l<h){
+            int m=(l+h)/2;
+            if(s(n,m)<k)
+                l=m+1;
+            else
+                h=m;
+        }
+        return l;
+    }
