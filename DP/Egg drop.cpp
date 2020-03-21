@@ -1,3 +1,5 @@
+# See explanation : https://leetcode.com/problems/super-egg-drop/solution/
+
 int superEggDrop(int k, int n){
         int table[n+1][k+1];
         for(int i=1;i<=n;i++)
@@ -19,30 +21,35 @@ int superEggDrop(int k, int n){
         return table[n][k];
     }
 
-//Another solution
-int s(int n,int x){
+//Best solution:
+class Solution {
+public:
+    int s(int k,int x,int n){
         int sum=0,r=1;
-        for(int i=1;i<=n;i++){
+        for(int i=1;i<=k;++i){
             r*=x-i+1;
             r/=i;
             sum+=r;
+            if(sum>=n)
+                break;
         }
         return sum;
     }
-    int superEggDrop(int n, int k){
-        int l=1,h=k;
+    int superEggDrop(int K, int N) {
+        int l=1,h=N;
         while(l<h){
             int m=(l+h)/2;
-            if(s(n,m)<k)
+            if(s(K,m,N)<N)
                 l=m+1;
             else
                 h=m;
         }
         return l;
     }
+};
 
 
-//Best Solution
+//A good Solution
 int superEggDrop(int K, int N) {
         int t[N+1][K+1];
         memset(t,0,sizeof(t));
