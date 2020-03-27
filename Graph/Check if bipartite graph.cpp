@@ -1,3 +1,4 @@
+// BFS
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -45,3 +46,43 @@ int main()
     isBipartite(g) ? cout << "Yes" : cout << "No"; 
     return 0; 
 } 
+
+
+//DFS
+void addedge(vector<int> adj[],int v,int w){
+        adj[v].push_back(w);
+    }
+    bool util(vector<int> adj[],int visited[],int color[],int i){
+        for(int j:adj[i]){
+            if(!visited[j]){
+                visited[j]=1;
+                color[j]=!color[i];
+                if(!util(adj,visited,color,j))
+                    return false;
+            }
+            else if(color[j]==color[i])
+                return false;
+        }
+        return true;
+    }
+    
+    bool isBipartite(vector<vector<int>>& graph) {
+        int v=graph.size();
+        int color[v];
+        vector<int> adj[v];
+        for(int i=0;i<v;i++){
+            for(int j=0;j<graph[i].size();j++){
+                addedge(adj,i,graph[i][j]);
+            }
+        }
+        memset(color,-1,sizeof(color));
+        int visited[v];
+        memset(visited,0,sizeof(visited));
+        color[0]=0;
+        for(int i=0;i<v;i++){
+            if(color[i]==-1)
+                if(!util(adj,visited,color,i))
+                    return false;
+        }
+        return true;
+    }
