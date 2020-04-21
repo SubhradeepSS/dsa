@@ -24,7 +24,7 @@ int main()
     return 0; 
 } 
 
-//O(n) solution
+//O(n) solution to check reachability from 1st pos to last pos
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
