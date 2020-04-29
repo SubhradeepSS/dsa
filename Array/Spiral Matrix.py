@@ -1,29 +1,37 @@
-R=4
-C=4
-
-def print_f(a,i,j,m,n):
-    if i>=m or j>=n:
-        return
-    for p in range(j,n):
-        print(a[i][p],end=' ')
-    for p in range(i+1,m):
-        print(a[p][n-1],end=' ')
-    if (n-1)!=j:
-        p=n-2
-        while p>=j:
-            print(a[m-1][p],end=' ')
-            p-=1
-    if (m-1)!=i:
-        p=n-2
-        while p>i:
-            print(a[p][j],end=' ')
-            p-=1
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        if not matrix:
+            return []
+        
+        l=[]
+        
+        def util(i,j,r,c):
+            if i>r or j>c:
+                return
             
-    print_f(a,i+1,j+1,m-1,n-1)
-
-a = [ [ 1, 2, 3, 4 ], 
-                    [ 5, 6, 7, 8 ], 
-                    [ 9, 10, 11, 12 ], 
-                    [ 13, 14, 15, 16 ] ]; 
-  
-print_f(a, 0, 0, R, C); 
+            for k in range(j,c+1):
+                l.append(matrix[i][k])
+            for k in range(i+1,r+1):
+                l.append(matrix[k][c])
+            
+            if i<r:
+                k=c-1
+                while k>=j:
+                    l.append(matrix[r][k])
+                    k-=1
+            
+            if j<c:
+                k=r-1           
+                while k>i:
+                    l.append(matrix[k][j])
+                    k-=1
+            
+            util(i+1,j+1,r-1,c-1)
+            
+        util(0,0,len(matrix)-1,len(matrix[0])-1)
+        
+        return l
