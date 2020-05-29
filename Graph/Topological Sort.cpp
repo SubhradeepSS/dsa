@@ -78,3 +78,64 @@ int main()
 
 	return 0; 
 } 
+//BFS
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph{
+	int v;
+	list<int> *adj;
+public:
+	Graph(int v){
+		this->v=v;
+		adj = new list<int>[v];
+	}
+	void addedge(int a,int b){
+		adj[a].push_back(b);
+	}
+	bool cycle();
+};
+
+bool Graph::cycle(){
+	vector<int> in_degree(v,0);
+	for(int i=0;i<v;i++){
+		for(auto j:adj[i])
+			in_degree[j]++;
+	}
+	int c=0;
+	queue<int> q;
+	vector<int> top_order;
+
+	for(int i=0;i<v;i++)
+	{
+		if(in_degree[i]==0)
+			q.push(i);
+	}
+
+	while(!q.empty()){
+		int u=q.front();
+		q.pop();
+		top_order.push_back(u);
+
+		for(auto it:adj[u]){
+			if(--in_degree[it]==0)
+				q.push(it);
+		}
+		c++;
+	}
+	for(int i:top_order)
+		cout<<i<<" ";
+	return (c!=v);
+}
+
+int main(){
+	int v,e;
+	cin>>v>>e;
+	Graph g(v);
+	for(int i=0;i<e;i++){
+		int s,e;
+		cin>>s>>e;
+		g.addedge(s,e);
+	}
+	g.cycle()?cout<<"yes":cout<<"no";
+}
