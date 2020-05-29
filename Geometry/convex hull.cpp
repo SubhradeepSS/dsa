@@ -123,7 +123,7 @@ void hull(point points[],int n){
 	st.push(points[2]);
 
 	for(int i=3;i<j;i++){
-		if(orientation(nextToTop(st),st.top(),points[i])!=2)
+		while(orientation(nextToTop(st),st.top(),points[i])!=2)
 			st.pop();
 		st.push(points[i]);
 	}
