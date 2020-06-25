@@ -1,3 +1,4 @@
+// Iterative
 void diagonalPrint(Node* root){
     if(!root)
         return;
@@ -25,3 +26,29 @@ void diagonalPrint(Node* root){
         }
     }
 }
+
+// Recursive
+void util(Node* node,map<int,vector<int>>& mp,int order){
+    if(!node)
+        return;
+
+    mp[order].push_back(node->data);
+
+    util(node->left,mp,order+1);
+    util(node->right,mp,order);
+}
+
+void diagonalPrint(Node* root){
+    if(!root)
+        return;
+
+    map<int, vector<int>> mp;
+
+    util(root,mp,0);
+
+    for(auto it:mp){
+        for(int i:it.second)
+            cout<<i<<" ";
+        cout<<endl;
+    }
+} 
