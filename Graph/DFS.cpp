@@ -1,3 +1,4 @@
+// Recursive
 #include <bits/stdc++.h> 
 using namespace std; 
 class Graph{
@@ -47,3 +48,35 @@ int main()
   
     return 0; 
 } 
+
+// Iterative
+void dfsutil(vector<int> g[],int v, vector<bool>& visited, vector<int>& ans){
+    visited[v]=true;
+    stack<int> st;
+    st.push(v);
+    
+    while(!st.empty()){
+        int t=st.top();
+        st.pop();
+        ans.push_back(t);
+        
+        for(int n:g[t]){
+            if(!visited[n]){
+                visited[n]=true;
+                st.push(n);
+            }
+        }
+    }
+}
+vector <int> dfs(vector<int> g[], int N)
+{
+    
+    // Your code here
+    vector<int> ans;
+    vector<bool> visited(N,false);
+    for(int i=0;i<N;i++){
+        if(!visited[i])
+            dfsutil(g,i,visited,ans);
+    }
+    return ans;
+}
