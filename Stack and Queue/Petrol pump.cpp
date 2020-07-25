@@ -7,8 +7,8 @@ struct petrolPump{
 int printTour(petrolPump arr[],int n){
     int start=0,end=1;
     int curr_petrol=arr[start].petrol-arr[start].dist;
-    while(curr_petrol<0||start<end){
-        while(curr_petrol<0&&start<end){
+    while(curr_petrol<0||start!=end){
+        while(curr_petrol<0&&start!=end){
             curr_petrol-=arr[start].petrol-arr[start].dist;
             start=(start+1)%n;
             if(start==0)
