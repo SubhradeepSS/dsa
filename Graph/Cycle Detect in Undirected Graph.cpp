@@ -1,4 +1,5 @@
- #include<bits/stdc++.h>
+// dfs 
+#include<bits/stdc++.h>
 using namespace std; 
 class Graph 
 { 
@@ -47,22 +48,34 @@ bool Graph::isCyclic()
  return false;
 } 
 
-int main() 
-{ 
-	Graph g1(5); 
-	g1.addEdge(1, 0); 
-	g1.addEdge(0, 2); 
-	g1.addEdge(2, 1); 
-	g1.addEdge(0, 3); 
-	g1.addEdge(3, 4); 
-	g1.isCyclic()? cout << "Graph contains cycle\n": 
-				cout << "Graph doesn't contain cycle\n"; 
-
-	Graph g2(3); 
-	g2.addEdge(0, 1); 
-	g2.addEdge(1, 2); 
-	g2.isCyclic()? cout << "Graph contains cycle\n": 
-				cout << "Graph doesn't contain cycle\n"; 
-
-	return 0; 
-} 
+// bfs
+bool f(int v,vector<bool>& vis,vector<int> g[]){
+    queue<int> q;
+    q.push(v);
+    vis[v]=true;
+    vector<int> p(vis.size(),-1);
+    while(!q.empty()){
+        int t=q.front();
+        q.pop();
+        for(int j:g[t]){
+            if(!vis[j]){
+                vis[j]=true;
+                p[j]=t;
+                q.push(j);
+            }
+            else if(p[t]!=j)
+                return true;
+        }
+    }
+    return false;
+}
+bool isCyclic(vector<int> g[], int V)
+{
+   // Your code here
+   vector<bool> vis(V,false);
+   for(int i=0;i<V;i++){
+       if(!vis[i]&&f(i,vis,g))
+        return true;
+   }
+   return false;
+}
