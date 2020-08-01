@@ -1,23 +1,34 @@
-//No negative values
-    TreeNode* util(vector<int> inorder, vector<int> postorder,unordered_map<int,int> &mp,int start,int end,int *pidx){
-        if(start>end)
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    unordered_map<int,int> mp;
+    int p_idx;
+    TreeNode* f(int l,int h,vector<int> postorder,vector<int> inorder){
+        if(l>h)
             return NULL;
-        int curr=postorder[*pidx];
-        (*pidx)--;
-        TreeNode* node=new TreeNode(curr);
-        if(start==end)
+        TreeNode* node=new TreeNode(postorder[p_idx--]);
+        if(l==h)
             return node;
-        int inidx=mp[curr];
-        node->right=util(inorder,postorder,mp,inidx+1,end,pidx);
-        node->left=util(inorder,postorder,mp,start,inidx-1,pidx);
+        node->right=f(mp[node->val]+1,h,postorder,inorder);
+        node->left=f(l,mp[node->val]-1,postorder,inorder);
         return node;
     }
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        unordered_map<int,int> mp;
-        for(int i=0;i<inorder.size();i++)
+        p_idx=inorder.size()-1;
+        mp.clear();
+        for(int i=0;i<=p_idx;i++){
             mp[inorder[i]]=i;
-        int pidx=postorder.size()-1;
-        return util(inorder,postorder,mp,0,inorder.size()-1,&pidx);
+        }
+        return f(0,p_idx,postorder,inorder);
     }
-  //Negative values
-  Use search func instead of map
+};
