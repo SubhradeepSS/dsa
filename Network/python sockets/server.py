@@ -3,9 +3,8 @@ import threading
 
 HEADER = 64
 PORT = 5500
-#SERVER = "192.168.43.157"
 SERVER = socket.gethostbyname(socket.gethostname())
-#print(SERVER)
+# print(SERVER)
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MSG = '!DISCONNECT'
