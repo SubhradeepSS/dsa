@@ -1,13 +1,13 @@
 CREATE TABLE Student (
     RollNo INT PRIMARY KEY,
     Name_ VARCHAR(20),
-    Total INT,
     Marks_1 INT,
     Marks_2 INT,
     Marks_3 INT,
     Marks_4 INT,
     Marks_5 INT,
-    Marks_6 INT
+    Marks_6 INT,
+    Total INT AS (Marks_1 + Marks_2 + Marks_3 + Marks_4 + Marks_5 + Marks_6)
 );
 
 CREATE TABLE Department (
@@ -35,8 +35,8 @@ VALUES
 (5, 'Levinson', 81, 87, 86, 82, 99, 100);
 
 -- Updating Total from added marks
-UPDATE Student
-SET Total = (Marks_1 + Marks_2 + Marks_3 + Marks_4 + Marks_5 + Marks_6);
+-- UPDATE Student
+-- SET Total = (Marks_1 + Marks_2 + Marks_3 + Marks_4 + Marks_5 + Marks_6);
 
 
 INSERT INTO Department

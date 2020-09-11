@@ -72,17 +72,23 @@ SELECT serial_no, manufacturer, price FROM Car WHERE serial_no IN
 (SELECT salesperson_id FROM Sales_person WHERE name_='John'));
 
 -- 2
-SELECT car_table.serial_no, car_table.model FROM Car car_table
-LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
-WHERE options_table.serial_no IS NULL;
+-- SELECT car_table.serial_no, car_table.model FROM Car car_table
+-- LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
+-- WHERE options_table.serial_no IS NULL;
+
+SELECT serial_no, model FROM Car WHERE serial_no NOT IN
+(SELECT serial_no FROM Options_);
 
 -- 3
-SELECT car_table.serial_no, car_table.model FROM Car car_table
-LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
-WHERE options_table.serial_no IS NOT NULL;
+-- SELECT car_table.serial_no, car_table.model FROM Car car_table
+-- LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
+-- WHERE options_table.serial_no IS NOT NULL;
+
+SELECT serial_no, model FROM Car WHERE serial_no IN
+(SELECT serial_no FROM Options_);
 
 -- 4
 UPDATE Sales_person
-SET phone = '9999999999' WHERE salesperson_id = 3;
+SET phone = '999999999' WHERE salesperson_id = 3;
 
 SELECT * FROM Sales_Person;
