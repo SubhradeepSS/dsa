@@ -67,23 +67,17 @@ SELECT * FROM Sales;
 
 
 -- 1
-SELECT serial_no, manufacturer, price FROM Car WHERE serial_no IN 
-(SELECT serial_no FROM Sales WHERE salesperson_id IN 
-(SELECT salesperson_id FROM Sales_person WHERE name_='John'));
+SELECT Car.serial_no, manufacturer, sale_price 
+FROM Car INNER JOIN Sales
+ON Car.serial_no = Sales.serial_no
+WHERE Sales.salesperson_id IN 
+(SELECT salesperson_id FROM Sales_person WHERE name_='John');
 
 -- 2
--- SELECT car_table.serial_no, car_table.model FROM Car car_table
--- LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
--- WHERE options_table.serial_no IS NULL;
-
 SELECT serial_no, model FROM Car WHERE serial_no NOT IN
 (SELECT serial_no FROM Options_);
 
 -- 3
--- SELECT car_table.serial_no, car_table.model FROM Car car_table
--- LEFT JOIN Options_ options_table ON car_table.serial_no = options_table.serial_no
--- WHERE options_table.serial_no IS NOT NULL;
-
 SELECT serial_no, model FROM Car WHERE serial_no IN
 (SELECT serial_no FROM Options_);
 
