@@ -66,19 +66,24 @@ SELECT * FROM SalesPerson;
 SELECT * FROM Trip;
 SELECT * FROM Salerep_Expense;
 
--- 1
+
+-- Queries:
+-- 1: Give the details (all attributes of trip relation) for trips thatexceed Rs2000. 
 SELECT * FROM Trip WHERE trip_id IN 
 (SELECT trip_id FROM Salerep_Expense 
 GROUP BY trip_id HAVING SUM(amount) > 2000);
 
--- 2
+
+-- 2: Print the ssn of salesperson who took trips to chennai more than once 
 SELECT ssn FROM SalesPerson WHERE ssn IN 
 (SELECT DISTINCT ssn FROM Trip GROUP BY to_city 
 HAVING COUNT(to_city) > 1 AND to_city = 'Chennai');
 
--- 3
+
+-- 3: Print the total trip expenses incurred by the salesperson with ssn = 1000
 SELECT SUM(amount) AS Expense FROM Salerep_Expense WHERE trip_id IN 
 (SELECT trip_id FROM Trip WHERE ssn = 1000);
 
--- 4
+
+-- 4: Display the salesperson details in the sorted order based on name.
 SELECT * FROM SalesPerson ORDER BY name_;

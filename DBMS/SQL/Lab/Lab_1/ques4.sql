@@ -66,23 +66,26 @@ SELECT * FROM Sales_Person;
 SELECT * FROM Sales;
 
 
--- 1
+-- Queries:
+-- 1: For the sales personnamed ‘John’ list the following information for all the cars sold :  serial no,  manufacturer, sale_price 
 SELECT Car.serial_no, manufacturer, sale_price 
-FROM Car INNER JOIN Sales
-ON Car.serial_no = Sales.serial_no
+FROM Car INNER JOIN Sales ON Car.serial_no = Sales.serial_no
 WHERE Sales.salesperson_id IN 
 (SELECT salesperson_id FROM Sales_person WHERE name_='John');
 
--- 2
+
+-- 2: List the serial_no and model of cars that have no options 
 SELECT serial_no, model FROM Car WHERE serial_no NOT IN
 (SELECT serial_no FROM Options_);
 
--- 3
+
+-- 3: List the serial_no, model, sale_price for the cars that have optional parts. 
 SELECT serial_no, model FROM Car WHERE serial_no IN
 (SELECT serial_no FROM Options_);
 
--- 4
+
+-- 4: Modify the phone no of a particular sales person 
 UPDATE Sales_person
-SET phone = '999999999' WHERE salesperson_id = 3;
+SET phone = '345678256' WHERE salesperson_id = 3;
 
 SELECT * FROM Sales_Person;

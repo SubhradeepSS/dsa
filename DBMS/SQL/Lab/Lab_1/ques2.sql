@@ -34,10 +34,6 @@ VALUES
 (4, 'Hudson', 86, 98, 95, 92, 94, 90),
 (5, 'Levinson', 81, 87, 86, 82, 99, 100);
 
--- Updating Total from added marks
--- UPDATE Student
--- SET Total = (Marks_1 + Marks_2 + Marks_3 + Marks_4 + Marks_5 + Marks_6);
-
 
 INSERT INTO Department
 VALUES
@@ -57,21 +53,25 @@ SELECT * FROM Department;
 SELECT * FROM StudDep;
 
 
-
--- 2
+-- Queries:
+-- 2: Display the Student details if deptid is given 
 SELECT * FROM Student WHERE RollNo IN 
 (SELECT RollNo FROM StudDep WHERE DeptId = 1);
 
--- 3
+
+-- 3: Display the department details  if rollno is given
 SELECT * FROM Department WHERE DeptId IN 
 (SELECT DeptId FROM StudDep WHERE RollNo = 1);
 
--- 4
+
+-- 4: Display the student names who got total greater than 500 
 SELECT Name_ FROM Student WHERE Total > 520;
 
--- 5
+
+-- 5: Display the HOD name of the CSE department 
 SELECT HODName FROM Department WHERE DeptName = 'CSE';
 
--- 6
+
+-- 6: Display the student rollnos of the CSE department
 SELECT RollNo FROM StudDep WHERE DeptId IN 
 (SELECT DeptId FROM Department WHERE DeptName='CSE');
