@@ -46,7 +46,8 @@ INSERT INTO Menu VALUES
 (1, "Monday", "Dosa", "Rotis", "Fried Rice"),
 (2, "Sunday", "Idli", "Channa", "Dosa"),
 (3, "Tuesday", "Ghee Dosa", "Paneer", "Pulao"),
-(5, "Thursday", "Masala Dosa", "Paneer", "Pulao");
+(5, "Thursday", "Masala Dosa", "Paneer", "Pulao"),
+(5, "Wednesday", "Masala Dosa", "Chicken", "Fried rice");
 
 INSERT INTO Warden VALUES 
 ("Rema", "Dr", 1),
@@ -80,8 +81,8 @@ SELECT COUNT(*) FROM Student WHERE hno=2;
 
 -- 6: Change the breakfast of the hostel 5 on Thursday to ‘Noodles'
 UPDATE Menu
-SET breakfast="Noodles" WHERE hno=5;
-SELECT breakfast from Menu WHERE hno=5;
+SET breakfast="Noodles" WHERE hno=5 and day_="Thursday";
+SELECT breakfast,day_ from Menu WHERE hno=5;
 
 
 -- 7: Display the Wardens for each hostel with the qualification ‘B.Com’.
