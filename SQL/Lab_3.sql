@@ -1,4 +1,10 @@
 -- QUESTION 1
+-- Hostel (hno, hname, type [boys/girls])
+-- Menu (hno, day, breakfast, lunch, dinner)
+-- Warden (wname, qual, hno)
+-- Student (sid, sname, gender, year, hno)
+
+
 -- 1 : Implement the above schema enforcing primary key, check constraints and foreign key constraints
 CREATE TABLE IF NOT EXISTS Hostel (
     hno INT PRIMARY KEY,
@@ -127,6 +133,12 @@ SELECT * FROM Student_View;
 
 
 -- QUESTION 2
+-- Department (dept id, dept name)
+-- Student (rollno, name, gender, mark1, mark2, mar3, total, average, dept id)
+-- Staff (staff id, name, designation, qualification, dept id)
+-- Tutor (rollno, staff id)
+
+
 CREATE TABLE Department (
     dept_id INT PRIMARY KEY,
     dept_name VARCHAR(255)
