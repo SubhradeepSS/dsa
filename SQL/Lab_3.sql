@@ -1,286 +1,163 @@
--- QUESTION 1
--- Hostel (hno, hname, type [boys/girls])
--- Menu (hno, day, breakfast, lunch, dinner)
--- Warden (wname, qual, hno)
--- Student (sid, sname, gender, year, hno)
+-- QUESTION 1:-
+-- Customer(Cust id : integer, cust_name: string)
+-- Item(item_id: integer, item_name: string, price: integer)
+-- Sales(bill_no: integer, bill_date: date, cust_id: integer, item_id: integer, qty_sold: integer)
 
 
--- 1 : Implement the above schema enforcing primary key, check constraints and foreign key constraints
-CREATE TABLE IF NOT EXISTS Hostel (
-    hno INT PRIMARY KEY,
-    hname VARCHAR(255) NOT NULL,
-    type_ VARCHAR(5),
-    CHECK (type_ IN ("boys", "girls"))
+-- 1: Create the tables with the appropriate integrity constraints 
+-- and insert around 5 records in each of the tables. 
+CREATE TABLE Customer (
+    cust_id INT PRIMARY KEY,
+    cust_name VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Menu (
-    hno INT,
-    day_ VARCHAR(255),
-    breakfast VARCHAR(255),
-    lunch VARCHAR(255),
-    dinner VARCHAR(255),
-    CHECK (day_ IN ("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")),
-    FOREIGN KEY (hno) REFERENCES Hostel(hno)
+CREATE TABLE Item (
+    item_id INT PRIMARY KEY,
+    item_name VARCHAR(255),
+    price INT
 );
 
-CREATE TABLE IF NOT EXISTS Warden (
-    wname VARCHAR(255),
-    qual VARCHAR(255),
-    hno INT,
-    FOREIGN KEY (hno) REFERENCES Hostel(hno)
-);
-
-CREATE TABLE IF NOT EXISTS Student (
-    sid_ INT PRIMARY KEY,
-    sname VARCHAR(255),
-    gender VARCHAR(10),
-    year_ INT,
-    hno INT,
-    FOREIGN KEY (hno) REFERENCES Hostel(hno)
-);
-
--- INSERTING VALUES 
-INSERT INTO Hostel VALUES
-(1, "Opal", "girls"),
-(2, "Jade", "boys"),
-(3, "Diamond", "boys"),
-(4, "Coral", "boys"),
-(5, "Agate", "boys");
-
-INSERT INTO Menu VALUES 
-(1, "Sunday", "Aloo Paratha", "Rice", "Chapathi Dhal"),
-(1, "Monday", "Dosa", "Rotis", "Fried Rice"),
-(2, "Sunday", "Idli", "Channa", "Dosa"),
-(3, "Tuesday", "Ghee Dosa", "Paneer", "Pulao"),
-(5, "Thursday", "Masala Dosa", "Paneer", "Pulao"),
-(5, "Wednesday", "Masala Dosa", "Chicken", "Fried rice");
-
-INSERT INTO Warden VALUES 
-("Rema", "Dr", 1),
-("Hari", "B.Com", 4),
-("Ram", "Dr", 2),
-("Jerome", "B.Com", 3);
-
-INSERT INTO Student VALUES 
-(1, "Rahi", "female", 3, 1),
-(2, "Jon", "male", 1, 2),
-(3, "Bernard", "male", 2, 3),
-(4, "Adi", "male", 3, 3);
-
--- QUERIES
--- 2: Display the total number of girls and boys hostel in the college.
-SELECT COUNT(*) FROM Hostel WHERE type_="Boys";
-SELECT COUNT(*) FROM Hostel WHERE type_="Girls";
-
-
--- 3: Display the menu in the hostel ‘x’ on Tuesday
-SELECT * FROM Menu WHERE hno=3 AND day_="Tuesday";
-
-
--- 4: Display the number of wardens for each hostel
-SELECT hno,COUNT(*) FROM Warden GROUP BY hno;
-
-
--- 5: Display the total number of students in the particular hostel
-SELECT COUNT(*) FROM Student WHERE hno=2;
-
-
--- 6: Change the breakfast of the hostel 5 on Thursday to ‘Noodles'
-UPDATE Menu
-SET breakfast="Noodles" WHERE hno=5 and day_="Thursday";
-SELECT breakfast,day_ from Menu WHERE hno=5;
-
-
--- 7: Display the Wardens for each hostel with the qualification ‘B.Com’.
-SELECT * FROM Warden WHERE qual="B.Com";
-
-
--- 8: Display the total number of students in the particular hostel whose name starts with 'A'.
-SELECT COUNT(*) FROM Student WHERE hno=3 AND sname LIKE "A%";
-
-
--- 9: Display total number of boys in hostel year wise.
-SELECT year_,COUNT(*) FROM Student GROUP BY year_;
-
-
--- 10: Display the names of the warden and hostel name for girl’s hostel.
-SELECT * FROM Hostel WHERE type_="Girls";
-SELECT wname FROM Warden WHERE hno IN (
-    SELECT hno FROM Hostel WHERE type_="Girls"
+CREATE TABLE Sales (
+    bill_no INT PRIMARY KEY,
+    bill_date DATE,
+    cust_id INT,
+    item_id INT,
+    qty_sold INT,
+    FOREIGN KEY (cust_id) REFERENCES Customer(cust_id),
+    FOREIGN KEY (item_id) REFERENCES Item(item_id)
 );
 
 
--- 11: Display warden name and hostel name for third year students.
-SELECT wname FROM Warden WHERE hno IN (
-    SELECT hno FROM Student WHERE year_=3
-);
-SELECT hname FROM Hostel WHERE hno IN (
-    SELECT hno FROM Student WHERE year_=3
-);
+INSERT INTO Customer VALUES
+(1,'A'), (2,'B'), (3,'C'), (4,'D'), (5,'E');
+
+INSERT INTO Item VALUES
+(1,'i1',100), (2,'i2',200), (3,'i3',310), (4,'i4',50), (5,'i5',105);
+
+INSERT INTO Sales VALUES
+(1, '2020-09-29', 1, 1, 2),
+(2, '2020-09-17', 2, 3, 10),
+(3, '2020-08-20', 3, 4, 1),
+(4, '2020-09-01', 1, 2, 6),
+(5, '2020-09-02', 1, 5, 4);
 
 
--- 12: Display the warden name and total number of students in hostel wise.
-SELECT hno,wname FROM Warden GROUP BY hno;
-SELECT hno,COUNT(*) AS Total FROM Student GROUP BY hno;
+-- 2: List all the bills for the current date with the customer names and item_id.
+SELECT Sales.item_id, Customer.cust_name FROM
+Sales INNER JOIN Customer ON Sales.cust_id=Customer.cust_id
+WHERE Sales.bill_date=CURRENT_DATE();
 
 
--- 13: Create a view with name of the student, gender, hostel number and their warden name.
-CREATE VIEW Student_View AS
-SELECT sname, gender, Student.hno, wname 
-FROM Student INNER JOIN Warden ON Student.hno = Warden.hno;
-
-SELECT * FROM Student_View;
-
-
--- QUESTION 2
--- Department (dept id, dept name)
--- Student (rollno, name, gender, mark1, mark2, mar3, total, average, dept id)
--- Staff (staff id, name, designation, qualification, dept id)
--- Tutor (rollno, staff id)
-
-
-CREATE TABLE Department (
-    dept_id INT PRIMARY KEY,
-    dept_name VARCHAR(255)
-);
-
-CREATE TABLE Student_ (
-    roll_no INT PRIMARY KEY,
-    name_ VARCHAR(255),
-    gender VARCHAR(10),
-    mark1 INT,
-    mark2 INT,
-    mark3 INT,
-    total INT,
-    average INT,
-    dept_id INT,
-    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
-);
-
-CREATE TABLE Staff (
-    staff_id INT PRIMARY KEY,
-    name_ VARCHAR(255),
-    designation VARCHAR(255),
-    qualification VARCHAR(255),
-    dept_id INT,
-    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
-);
-
-CREATE TABLE Tutor (
-    roll_no INT,
-    staff_id INT,
-    FOREIGN KEY (roll_no) REFERENCES Student_(roll_no),
-    FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
-);
-
--- Inserting values
-INSERT INTO Department VALUES
-(1, "CSE"),
-(2, "ECE"),
-(3, "ICE");
-
-INSERT INTO Student_ (roll_no, name_, gender, mark1, mark2, mark3, dept_id) VALUES
-(1, "A", "F", 100, 100, 100, 1),
-(2, "B", "M", 98, 99, 100, 1),
-(3, "C", "M", 60, 60, 60, 2),
-(4, "R1", "M", 60, 60, 80, 2),
-(5, "R2", "F", 72, 69, 89, 3),
-(6, "D", "M", 90, 97, 100, 3);
-
-SELECT * FROM student_;
-
-INSERT INTO Staff VALUES
-(1, "x", "professor", "Dr", 1),
-(2, "y", "hod", "Dr", 1),
-(3, "z", "professor", "Dr", 2),
-(4, "w", "hod", "Dr", 3);
-
-INSERT INTO Tutor VALUES 
-(1, 1), (2, 1), (3, 3), (4, 2), (5, 2), (6, 3);
-
-
--- QUERIES
--- 1: Calculate the total and average mark of each student while entering the marks to insert the tuple in student table
-UPDATE Student_
-SET total = (mark1+mark2+mark3);
-UPDATE Student_
-SET average = (total)/3;
-
-
--- 1: Display the number of student under the department ‘cse’.
-SELECT COUNT(*) FROM Student_ WHERE dept_id = (
-    SELECT dept_id FROM Department WHERE dept_name="CSE"
+-- 3: List the details of the customer who have bought a product 
+-- which has a price>200.
+SELECT * FROM Customer WHERE cust_id IN (
+    SELECT Sales.cust_id FROM Sales INNER JOIN Item ON 
+    Item.item_id=Sales.item_id WHERE price>200
 );
 
 
--- 2: Display the student details who got average >85.
-SELECT * FROM Student_ WHERE average > 85;
+-- 4: Give a count of how many products have been bought by 
+-- each customer.
+SELECT cust_id, COUNT(*) FROM Sales GROUP BY cust_id;
 
 
--- 3: How many students are under the tutor ‘x’
-SELECT COUNT(*) FROM Student_ WHERE roll_no IN (
-    SELECT roll_no FROM Tutor WHERE staff_id IN (
-        SELECT staff_id FROM Staff WHERE name_="x"
-    )
+-- 5: Give a list of products bought by a customer having cust_id as 5
+SELECT Item.* FROM Item INNER JOIN Sales 
+ON Item.item_id=Sales.item_id WHERE cust_id=5;
+
+
+-- 6: List the item details which are sold as of today
+SELECT Item.* FROM Item INNER JOIN Sales
+ON Item.item_id=Sales.item_id WHERE bill_date=CURRENT_DATE();
+
+
+-- 7: Create a view which lists out the bill_no, bill_date, 
+-- cust_id, item_id, price, qty_sold, amount. 
+CREATE VIEW myView AS SELECT Sales.*,price FROM 
+Sales INNER JOIN Item on Sales.item_id=Item.item_id;
+SELECT * FROM myView;
+
+-- Create a view which lists the daily sales date wise 
+-- for the last one week.
+CREATE VIEW SalesView AS SELECT * FROM Sales
+WHERE bill_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE();
+SELECT * FROM SalesView;
+
+
+--------------------------------------------------------------------------
+
+-- QUESTION 2:-
+-- Student(stud_no: integer, stud_name: string, class: string)
+-- Class(class: string, descrip: string)
+-- Lab(mach_no: integer, Lab_no: integer, description: String)
+-- Allotment(stud_no: integer, mach_no: integer, day_of_week: string)
+
+-- 1: Create the tables with the appropriate integrity constraints 
+-- and insert around 5 records in each of the tables
+CREATE TABLE Class (
+    class VARCHAR(255) PRIMARY KEY,
+    descrip VARCHAR(255)
 );
 
-
--- 4: Display the staff details who work in CSE department.
-SELECT * FROM Staff WHERE dept_id = (
-    SELECT dept_id FROM Department WHERE dept_name="CSE"
+CREATE TABLE Student (
+    stud_no INT PRIMARY KEY,
+    stud_name VARCHAR(255),
+    class VARCHAR(255),
+    FOREIGN KEY (class) REFERENCES Class(class)
 );
 
-
--- 5: How many designations and departments are there?
-SELECT COUNT(*) FROM Department;
-SELECT COUNT(DISTINCT Designation) FROM Staff;
-
-
--- 6: Display the student details whose name start with ‘R’.
-SELECT * FROM Student_ WHERE Student_.name_ LIKE "R%";
-
-
--- 7: Display the name of the department, tutor details for the particular student
-SELECT dept_name, staff_id,name_, designation, qualification
-FROM Department INNER JOIN staff ON Department.dept_id=Staff.dept_id
-WHERE staff_id IN (
-    SELECT staff_id FROM Tutor WHERE roll_no=1
+CREATE TABLE Lab (
+    mach_no INT PRIMARY KEY,
+    lab_no INT,
+    description_ VARCHAR(255)
 );
 
-
--- 8: Display the total number of male and female students in department wise.
-SELECT dept_id,COUNT(*) FROM Student_  WHERE gender="M" GROUP BY dept_id;
-SELECT dept_id,COUNT(*) FROM Student_  WHERE gender="F" GROUP BY dept_id;
-
-
--- 9: Display the student name in department wise who got first mark.
-SELECT name_,dept_id,average FROM Student_ WHERE average IN (
-    SELECT MAX(average) FROM Student_ GROUP BY dept_id
-); 
-
-
--- 10: Display tutor details for toppers in department wise
-SELECT * FROM Staff WHERE staff_id IN (
-    SELECT staff_id FROM Tutor WHERE roll_no IN (
-        SELECT roll_no FROM Student_ WHERE average IN (
-            SELECT MAX(average) FROM Student_ GROUP BY dept_id
-        )
-    )
+CREATE TABLE Allotment (
+    stud_no INT,
+    mach_no INT,
+    day_of_week VARCHAR(255),
+    FOREIGN KEY (stud_no) REFERENCES Student(stud_no),
+    FOREIGN KEY (mach_no) REFERENCES Lab(mach_no)
 );
 
+INSERT INTO Class VALUES
+('c_1', 'dbms'), ('c_2','os'), ('c_3','ds'), ('c_4','csit'), ('c_5','ip');
 
--- 11: Display the staff details who is the tutor for female students.
-SELECT * FROM Staff WHERE staff_id IN (
-    SELECT staff_id FROM Tutor WHERE roll_no IN (
-        SELECT roll_no FROM Student_ WHERE gender="F"
-    )
+INSERT INTO Student VALUES
+(1,'A','c_1'), (2,'B','c_2'), (3,'C','c_3'), (4,'D','c_4'), (5,'E','c_5');
+
+INSERT INTO Lab VALUES
+(1,1,'dbms'), (2,2,'os'),(3,3,'ds'),(4,4,'csit'), (5,5,'ip');
+
+INSERT INTO Allotment VALUES
+(1,1,'Mon'), (2,2,'Tue'), (3,3,'Wed'), (4,4,'Thurs');
+
+
+-- 2: List all the machine allotments with the student names,lab and machine numbers.
+SELECT Student.stud_name,lab_no,Allotment.mach_no FROM Allotment INNER JOIN Lab ON 
+Allotment.mach_no=Lab.mach_no INNER JOIN Student ON Allotment.stud_no=Student.stud_no;
+
+
+-- 3: Display list of student who has not given any machine.
+SELECT * FROM Student WHERE stud_no NOT IN (
+    SELECT stud_no FROM Allotment
 );
 
+-- 4: Give a count of how many machines have been allocated to the 'CSIT' class.
+SELECT COUNT(*) FROM Allotment INNER JOIN Student ON 
+Allotment.stud_no=Student.stud_no INNER JOIN Class ON 
+Student.class=Class.class WHERE Class.descrip="csit";
 
--- 12:Create a view to staff details and their department name whose designation is professor
-CREATE VIEW Staff_View AS
-SELECT staff_id,name_,designation,qualification,dept_name 
-FROM Staff INNER JOIN Department ON Staff.dept_id=Department.dept_id
-WHERE Staff.designation="professor";
 
-SELECT * FROM Staff_view;
+-- 5: Count for how many machines have been allocated in Lab_no 1 
+-- for the day of the week as “Monday”.
+SELECT COUNT(*) FROM Allotment INNER JOIN Lab ON Lab.mach_no=Allotment.mach_no
+WHERE day_of_week='Mon' AND Lab.lab_no=1;
+
+
+-- 6: Create a view which lists out the stud_no, stud_name, mach_no, lab_no, dayofweek
+CREATE VIEW ClassView as SELECT
+Student.stud_no,stud_name,lab_no,Lab.mach_no,day_of_week FROM Allotment INNER JOIN Lab ON 
+Allotment.mach_no=Lab.mach_no INNER JOIN Student ON Allotment.stud_no=Student.stud_no;
+
+SELECT * FROM ClassView;
