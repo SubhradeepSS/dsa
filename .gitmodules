@@ -1,3 +1,6 @@
 [submodule "CodeChef-Solutions"]
 	path = CodeChef-Solutions
 	url = https://github.com/SubhradeepSS/CodeChef-Solutions
+[submodule "LeetCode-Solutions"]
+	path = LeetCode-Solutions
+	url = https://github.com/SubhradeepSS/LeetCode-Solutions
